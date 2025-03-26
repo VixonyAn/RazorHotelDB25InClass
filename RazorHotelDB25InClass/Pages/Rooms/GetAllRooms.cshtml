@@ -1,0 +1,49 @@
+﻿@page
+@using RazorHotelDB25InClass.Models
+@model RazorHotelDB25InClass.Pages.Rooms.GetAllRoomsModel
+@{
+    ViewData["Title"] = "GetAllRooms";
+}
+
+<h4>List of rooms</h4>
+<br />
+<hr />
+<br />
+
+<br />
+<hr />
+<br />
+Hotel @Model.Hotel.Navn has @Model.Rooms.Count rooms;
+<br />
+<a asp-page="../Hotels/GetAllHotels" class="btn btn primary" style="color: white; background-color: gray; border-color: gray;">Back to Hotels</a>
+<a asp-page="Create" asp-route-hotelNr="@Model.HotelNr" class="btn btn primary" style="color: white; background-color: green; border-color: green;">Create a Room</a>
+
+<table>
+    <thead style="background-color: gray; border: solid 1px; border-color: white;">
+        <tr>
+            <th>Room No</th>
+            <th>Hotel No</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody style="background-color: lightgray; text-align: center;">
+        @if (Model.Rooms.Count() != 0)
+        {
+            @foreach (Room item in Model.Rooms)
+            {
+                <tr style="border: solid 1px; border-color: white;">
+                    <td style="border: solid 1px; border-color: white;">@item.RoomNr</td>
+                    <td style="border: solid 1px; border-color: white;">@item.HotelNr</td>
+                    <td style="border: solid 1px; border-color: white;">@item.Types</td>
+                    <td style="border: solid 1px; border-color: white;">@item.Pris</td>
+                    <td style="border: solid 1px; border-color: white;">
+                        <a asp-page="Update" asp-route-hotelNr="@item.HotelNr" asp-route-roomNr="@item.RoomNr" class="btn btn primary" style="color: white; background-color: gray; border-color: gray;">Update</a>
+                        <a asp-page="Delete" asp-route-hotelNr="@item.HotelNr" asp-route-roomNr="@item.RoomNr" class="btn btn primary" style="color: white; background-color: #C94646; border-color: #C94646;">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

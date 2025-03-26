@@ -1,0 +1,44 @@
+﻿@page
+@using RazorHotelDB25InClass.Models
+@model RazorHotelDB25InClass.Pages.Hotels.GetAllHotelsModel
+@{
+    ViewData["Title"] = "GetAllHotels";
+}
+
+<h4>List of hotels</h4>
+
+Number of hotels is: @Model.Hotels.Count;
+<br/>
+<a asp-page="Create">Create a hotel</a>
+
+<table>
+    <thead style="background-color: gray; border: solid 1px; border-color: white;">
+        <tr>
+            <th>Hotel No</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Rooms</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody style="background-color: lightgray; text-align: center;">
+        @if (Model.Hotels.Count() != 0)
+        {
+            @foreach(Hotel item in Model.Hotels)
+            {
+                <tr style="border: solid 1px; border-color: white;">
+                    <td style ="border: solid 1px; border-color: white;">@item.HotelNr</td>
+                    <td style="border: solid 1px; border-color: white;">@item.Navn</td>
+                    <td style="border: solid 1px; border-color: white;">@item.Adresse</td>
+                    <td style="border: solid 1px; border-color: white;">
+                        <a asp-page="../Rooms/GetAllRooms" asp-route-hotelNr="@item.HotelNr" class="btn btn primary" style="color: white; background-color: gray; border-color: gray;">Rooms</a>
+                    </td>
+                    <td style="border: solid 1px; border-color: white;">
+                        <a asp-page="Update" asp-route-HotelNr="@item.HotelNr" class="btn btn primary" style="color: white; background-color: gray; border-color: gray;">Update</a>
+                        <a asp-page="Delete" asp-route-HotelNr="@item.HotelNr" class="btn btn primary" style="color: white; background-color: #C94646; border-color: #C94646;">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
