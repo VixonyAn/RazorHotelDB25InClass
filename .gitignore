@@ -240,6 +240,7 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 /RazorHotelDB25InClass/Services/Secret.cs
+Secret.cs
 
 # Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
@@ -362,3 +363,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/RazorHotelDB25InClass/Services/
+/RazorHotelDB25InClass/Services/Secret.cs
