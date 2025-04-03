@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorHotelDB25InClass.Interfaces;
 using RazorHotelDB25InClass.Models;
 using RazorHotelDB25InClass.Services;
+using System.Reflection;
 
 namespace RazorHotelDB25InClass.Pages.Rooms
 {
@@ -20,6 +22,7 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         public int HotelNr { get; set; }
 
         public Hotel Hotel { get; set; }
+        public List<SelectListItem> HotelSelectList { get; set; }
         #endregion
 
         #region Constructor
@@ -36,7 +39,20 @@ namespace RazorHotelDB25InClass.Pages.Rooms
             HotelNr = hotelNr;
             Hotel = await _hotelService.GetHotelFromIdAsync(hotelNr);
             Rooms = await _roomService.GetAllRoomAsync(HotelNr);
+            // onget if hotelNr = null then set to get all?
         }
+
+        //private async Task createHotelSelectList() // small first letter for private methods
+        //{
+        //    List<Hotel> HotelList = await _hotelService.GetAllHotelAsync();
+        //    HotelSelectList = new List<SelectListItem>();
+        //    HotelSelectList.Add(new SelectListItem("Vælg en Hotel", "-1"));
+        //    foreach (Hotel hotel in HotelList)
+        //    {
+        //        SelectListItem hsl = new SelectListItem(hotel.HotelNr.ToString(), hotel.Navn);
+        //        HotelSelectList.Add(hsl);
+        //    }
+        //}
         #endregion
     }
 }

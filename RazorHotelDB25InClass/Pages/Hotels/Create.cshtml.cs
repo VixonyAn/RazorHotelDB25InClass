@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorHotelDB25InClass.Interfaces;
 using RazorHotelDB25InClass.Models;
+using RazorHotelDB25InClass.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace RazorHotelDB25InClass.Pages.Hotels
 {
@@ -13,8 +15,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Hotel Hotel { get; set; }
+        [BindProperty] public Hotel Hotel { get; set; }
         public string MessageError { get; set; }
         #endregion
 
@@ -30,6 +31,32 @@ namespace RazorHotelDB25InClass.Pages.Hotels
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // if ModelState is NOT valid, reload (triggers error messages)
+            if (!ModelState.IsValid) { return Page(); }
+            try
+            {
+                await _hotelService.CreateHotelAsync(Hotel);
+                return RedirectToPage("GetAllHotels");
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
+
+            /* if statement
+            if (_hotelService.GetHotelFromIdAsync(Hotel.HotelNr) != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    MessageError = $"Cannot create hotel. HotelID is already in use in the system.";
+                }
+                return Page();
+            }
+            await _hotelService.CreateHotelAsync(Hotel);
+            return RedirectToPage("GetAllHotels");
+            */
+            /* try catch statement
             try
             {
                 await _hotelService.CreateHotelAsync(Hotel);
@@ -39,7 +66,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
             {
                 MessageError = $"Kan ikke oprette en hotel med HotelNo '{Hotel.HotelNr}' denne ID findes allerede";
                 return Page();
-            }
+            } */
         }
         #endregion
     }

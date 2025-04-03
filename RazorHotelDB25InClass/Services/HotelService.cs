@@ -23,7 +23,6 @@ namespace RazorHotelDB25InClass.Services
                     SqlCommand command = new SqlCommand(queryString, connection);
                     await command.Connection.OpenAsync();
                     SqlDataReader reader = await command.ExecuteReaderAsync();
-                    Thread.Sleep(1000);
                     while (await reader.ReadAsync())
                     {
                         int hotelNr = reader.GetInt32("Hotel_No");
@@ -37,10 +36,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
                 }
                 finally { }
             }
@@ -58,7 +59,6 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@ID", hotelNr);
                     await command.Connection.OpenAsync();
                     SqlDataReader reader = await command.ExecuteReaderAsync();
-                    Thread.Sleep(1000);
                     if (await reader.ReadAsync()) // reads from data not from console
                     {
                         int hNr = reader.GetInt32("Hotel_No");
@@ -71,10 +71,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
                 }
                 finally { }
                 return hotel;
@@ -93,17 +95,16 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@Adresse", hotel.Adresse);
                     await command.Connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
-                    Thread.Sleep(1000);
                 }
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    return false;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    return false;
+                    throw ex;
                 }
                 finally { }
                 return true;
@@ -122,17 +123,16 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@Address", hotel.Adresse);
                     await command.Connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
-                    Thread.Sleep(1000);
                 }
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    return false;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    return false;
+                    throw ex;
                 }
                 finally { }
                 return true;
@@ -152,18 +152,17 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@ID", hotelNr);
                     await command.Connection.OpenAsync();
                     int noOfRows = await command.ExecuteNonQueryAsync();
-                    Thread.Sleep(1000);
                     if (noOfRows == 0) { return null; }
                 }
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    hotel = null;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    hotel = null;
+                    throw ex;
                 }
                 finally { }
                 return hotel;
@@ -181,7 +180,6 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@Search", "%" + name + "%");
                     await command.Connection.OpenAsync();
                     SqlDataReader reader = await command.ExecuteReaderAsync();
-                    Thread.Sleep(1000);
                     while (await reader.ReadAsync()) // reads from data not from console
                     {
                         int hotelNr = reader.GetInt32("Hotel_No");
@@ -195,10 +193,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
                 }
                 finally { }
                 return hoteller;

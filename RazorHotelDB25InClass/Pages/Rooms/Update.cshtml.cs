@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorHotelDB25InClass.Interfaces;
 using RazorHotelDB25InClass.Models;
 
@@ -12,22 +13,19 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Room Room { get; set; }
-
-        [BindProperty]
-        public int HotelNr { get; set; }
-        
-        [BindProperty]
-        public int RoomNr { get; set; }
-
+        [BindProperty] public Room Room { get; set; }
+        [BindProperty] public int HotelNr { get; set; }
+        [BindProperty] public int RoomNr { get; set; }
+        [BindProperty] public string Types { get; set; }
         public string MessageError { get; set; }
+        public List<SelectListItem> TypeSelectList { get; set; }
         #endregion
 
         #region Constructors
         public UpdateModel(IRoomService roomService) // dependency injection
         {
-            this._roomService = roomService; // parameter overført
+            _roomService = roomService; // parameter overført
+            createTypeSelectList();
         }
         #endregion
 
@@ -40,9 +38,18 @@ namespace RazorHotelDB25InClass.Pages.Rooms
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        private void createTypeSelectList() // small first letter for private methods
         {
-            await _roomService.UpdateRoomAsync(Room, RoomNr, HotelNr);
+            TypeSelectList = new List<SelectListItem>();
+            TypeSelectList.Add(new SelectListItem("Select a type", "-1"));
+            TypeSelectList.Add(new SelectListItem("S", "S"));
+            TypeSelectList.Add(new SelectListItem("D", "D"));
+            TypeSelectList.Add(new SelectListItem("F", "F"));
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        { // does not need validation as the values being changed do not have to be unique (they aren't primary keys)
+            await _roomService.UpdateRoomAsync(new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr), RoomNr, HotelNr);
             return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
         }
         #endregion

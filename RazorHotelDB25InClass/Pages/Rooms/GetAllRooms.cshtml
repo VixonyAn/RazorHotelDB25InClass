@@ -5,16 +5,8 @@
     ViewData["Title"] = "GetAllRooms";
 }
 
-<h4>List of rooms</h4>
-<br />
-<hr />
-<br />
+<h4>List of @Model.Hotel.Navn's @Model.Rooms.Count rooms</h4>
 
-<br />
-<hr />
-<br />
-Hotel @Model.Hotel.Navn has @Model.Rooms.Count rooms;
-<br />
 <a asp-page="../Hotels/GetAllHotels" class="btn btn primary" style="color: white; background-color: gray; border-color: gray;">Back to Hotels</a>
 <a asp-page="Create" asp-route-hotelNr="@Model.HotelNr" class="btn btn primary" style="color: white; background-color: green; border-color: green;">Create a Room</a>
 

@@ -5,11 +5,31 @@
     ViewData["Title"] = "GetAllHotels";
 }
 
-<h4>List of hotels</h4>
-
-Number of hotels is: @Model.Hotels.Count;
+<h4>List of current @Model.Hotels.Count hotels</h4>
 <br/>
-<a asp-page="Create">Create a hotel</a>
+<form method="get">
+    <p>
+        Search: <input type="text" asp-for="@Model.FilterCriteria" onchange="this.form.submit()" />
+
+        <div class="form-group">
+            <label class="custom-control-label">Sort By</label>
+            <input type="radio" asp-for="@Model.SortBy" value="HotelNr" onclick="this.form.submit()">HotelNr</input>
+            <input type="radio" asp-for="@Model.SortBy" value="Navn" onclick="this.form.submit()">Name</input>
+            <input type="radio" asp-for="@Model.SortBy" value="Adresse" onclick="this.form.submit()">Address</input>
+        </div>
+
+        <div class="form-group">
+            <label class="custom-control-label">Sort Order</label>
+            <select asp-for="SortOrder" onchange="this.form.submit()">
+                <option value="Ascending">Ascending</option>
+                <option value="Descending">Descending</option>
+            </select>
+        </div>
+    </p>
+</form>
+
+<br />
+<a asp-page="Create" class="btn btn primary" style="color: white; background-color: green; border-color: green;">Create a Hotel</a>
 
 <table>
     <thead style="background-color: gray; border: solid 1px; border-color: white;">

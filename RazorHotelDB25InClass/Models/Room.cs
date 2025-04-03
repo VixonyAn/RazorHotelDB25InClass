@@ -1,11 +1,22 @@
-﻿namespace RazorHotelDB25InClass.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RazorHotelDB25InClass.Models
 {
     public class Room
     {
+        #region Properties
+        [Required(ErrorMessage = "RoomNr is required")]
         public int RoomNr { get; set; }
+
+        [Required(ErrorMessage = "Type is required")]
         public char Types { get; set; }
+
+        [Required(ErrorMessage = "Price is required")]
         public double Pris { get; set; }
+        
+        [Required(ErrorMessage = "HotelNr is required")]
         public int HotelNr { get; set; }
+        #endregion
 
         public Room()
         {

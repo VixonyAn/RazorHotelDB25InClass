@@ -13,19 +13,18 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Room Room { get; set; }
-
-        [BindProperty]
-        public int HotelNr { get; set; }
-        
+        [BindProperty] public Room Room { get; set; }
+        [BindProperty] public int HotelNr { get; set; }
+        [BindProperty] public string Types { get; set; }
         public string MessageError { get; set; }
+        public List<SelectListItem> TypeSelectList { get; set; }
         #endregion
 
         #region Constructor
         public CreateModel(IRoomService roomService)
         {
             _roomService = roomService;
+            createTypeSelectList();
         }
         #endregion
 
@@ -37,18 +36,24 @@ namespace RazorHotelDB25InClass.Pages.Rooms
             HotelNr = hotelNr;
         }
 
+        private void createTypeSelectList() // small first letter for private methods
+        {
+            TypeSelectList = new List<SelectListItem>();
+            TypeSelectList.Add(new SelectListItem("Select a type", "-1"));
+            TypeSelectList.Add(new SelectListItem("S", "S"));
+            TypeSelectList.Add(new SelectListItem("D", "D"));
+            TypeSelectList.Add(new SelectListItem("F", "F"));
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
-            try
+            if (await _roomService.GetRoomFromIdAsync(Room.RoomNr, Room.HotelNr) != null)
             {
-                await _roomService.CreateRoomAsync(Room.HotelNr, Room);
-                return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
-            }
-            catch
-            {
-                MessageError = $"Kan ikke oprette en værelse. Enten findes HotelNr ikke, eller RoomNr er i brug på denne hotel allerede.";
+                MessageError = $"Cannot create room. RoomID is already in use at this hotel.";
                 return Page();
             }
+            await _roomService.CreateRoomAsync(Room.HotelNr, new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr));
+            return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
         }
         #endregion
     }

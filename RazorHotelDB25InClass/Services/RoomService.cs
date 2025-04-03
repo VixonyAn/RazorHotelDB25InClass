@@ -24,7 +24,6 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@HotelNo", hotelNr);
                     await command.Connection.OpenAsync();
                     SqlDataReader reader = await command.ExecuteReaderAsync();
-                    Thread.Sleep(1000);
                     while (await reader.ReadAsync()) // reads from data not from console
                     {
                         int roomNr = reader.GetInt32("Room_No");
@@ -38,10 +37,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
                 }
                 finally { }
                 return rooms;
@@ -73,10 +74,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
                 }
                 finally { }
                 return room;
@@ -100,12 +103,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    return false;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    return false;
+                    throw ex;
                 }
                 finally { }
                 return true;
@@ -129,12 +132,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    return false;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    return false;
+                    throw ex;
                 }
                 finally { }
                 return true;
@@ -160,12 +163,12 @@ namespace RazorHotelDB25InClass.Services
                 catch (SqlException sqlExp)
                 {
                     Console.WriteLine("Database error" + sqlExp.Message);
-                    room = null;
+                    throw sqlExp;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl: " + ex.Message);
-                    room = null;
+                    throw ex;
                 }
                 finally { }
                 return room;

@@ -12,18 +12,10 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Room Room { get; set; }
-
-        [BindProperty]
-        public int HotelNr { get; set; }
-        
-        [BindProperty]
-        public int RoomNr { get; set; }
-
-        [BindProperty]
-        public bool Confirm { get; set; }
-
+        [BindProperty] public Room Room { get; set; }
+        [BindProperty] public int HotelNr { get; set; }
+        [BindProperty] public int RoomNr { get; set; }
+        [BindProperty] public bool Confirm { get; set; }
         public string MessageError { get; set; }
         #endregion
 

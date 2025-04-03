@@ -12,8 +12,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Hotel Hotel { get; set; }
+        [BindProperty] public Hotel Hotel { get; set; }
         #endregion
 
         #region Constructors
@@ -31,7 +30,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         }
 
         public async Task<IActionResult> OnPostAsync(int HotelNr)
-        {
+        { // does not need validation as the values being changed do not have to be unique (they aren't primary keys)
             await _hotelService.UpdateHotelAsync(new Hotel(HotelNr, Hotel.Navn, Hotel.Adresse), HotelNr);
             return RedirectToPage("GetAllHotels");
         }
