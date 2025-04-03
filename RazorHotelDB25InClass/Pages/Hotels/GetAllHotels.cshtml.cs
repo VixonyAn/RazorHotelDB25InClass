@@ -40,7 +40,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
                     Hotels = await _hotelService.GetAllHotelAsync(); // fylder listen med data
                 }
                 if (SortBy == "Navn") { Hotels.Sort(); }
-                if (SortBy == "Navn") { Hotels.Sort(new HotelAddressCompare()); }
+                if (SortBy == "Adresse") { Hotels.Sort(new HotelAddressCompare()); }
                 if (SortOrder == "Descending") { Hotels.Reverse(); }
             }
             catch (Exception ex)

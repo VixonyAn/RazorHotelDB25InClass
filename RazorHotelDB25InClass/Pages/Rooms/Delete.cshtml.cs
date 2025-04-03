@@ -22,7 +22,7 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         #region Constructors
         public DeleteModel(IRoomService roomService) // dependency injection
         {
-            this._roomService = roomService; // parameter overført
+            _roomService = roomService; // parameter overført
         }
         #endregion
 

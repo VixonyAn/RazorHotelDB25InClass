@@ -18,7 +18,7 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #region Constructors
         public UpdateModel(IHotelService hotelService) // dependency injection
         {
-            this._hotelService = hotelService; // parameter overført
+            _hotelService = hotelService; // parameter overført
         }
         #endregion
 

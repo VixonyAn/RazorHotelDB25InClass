@@ -13,19 +13,15 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #endregion
 
         #region Properties
-        [BindProperty] // Two way binding
-        public Hotel Hotel { get; set; }
-
-        [BindProperty]
-        public bool Confirm { get; set; }
-
+        [BindProperty] public Hotel Hotel { get; set; }
+        [BindProperty] public bool Confirm { get; set; }
         public string MessageError { get; set; }
         #endregion
 
         #region Constructors
         public DeleteModel(IHotelService hotelService) // dependency injection
         {
-            this._hotelService = hotelService; // parameter overført
+            _hotelService = hotelService; // parameter overført
         }
         #endregion
 
