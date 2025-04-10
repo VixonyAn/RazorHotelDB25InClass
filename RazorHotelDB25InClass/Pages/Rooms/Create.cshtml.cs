@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorHotelDB25InClass.Interfaces;
 using RazorHotelDB25InClass.Models;
+using RazorHotelDB25InClass.Services;
 
 namespace RazorHotelDB25InClass.Pages.Rooms
 {
@@ -47,13 +48,23 @@ namespace RazorHotelDB25InClass.Pages.Rooms
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // if ModelState is NOT valid, reload (triggers error messages)
+            if (!ModelState.IsValid) { return Page(); }
             if (await _roomService.GetRoomFromIdAsync(Room.RoomNr, Room.HotelNr) != null)
-            {
+            { // if combo of values return an object, combo of values cannot be used again (dupes clause)
                 MessageError = $"Cannot create room. RoomID is already in use at this hotel.";
                 return Page();
             }
-            await _roomService.CreateRoomAsync(Room.HotelNr, new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr));
-            return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+            try
+            {
+                await _roomService.CreateRoomAsync(Room.HotelNr, new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr));
+                return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
         }
         #endregion
     }

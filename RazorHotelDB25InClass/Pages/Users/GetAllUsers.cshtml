@@ -1,0 +1,37 @@
+﻿@page
+@using RazorHotelDB25InClass.Models
+@model RazorHotelDB25InClass.Pages.Users.GetAllUsersModel
+@{
+    ViewData["Title"] = "GetAllUsers";
+}
+
+<h4>List of current @Model.Users.Count users</h4>
+
+<table>
+    <thead style="background-color: gray; border: solid 1px; border-color: white;">
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody style="background-color: lightgray; text-align: center;">
+        @if (Model.Users.Count() != 0)
+        {
+            @foreach (User item in Model.Users)
+            {
+                <tr style="border: solid 1px; border-color: white;">
+                    <td style="border: solid 1px; border-color: white;">@item.Username</td>
+                    <td style="border: solid 1px; border-color: white;">@item.Password</td>
+                    <td style="border: solid 1px; border-color: white;"><img src="~/images/memberimages/@item.ImageUrl" width=100px height=100px /></td>
+                    <td style="border: solid 1px; border-color: white;">
+                        <form method="post" style="display: inline;" asp-page-handler="Delete" asp-route-Username="@item.Username">
+                            <input type="submit" value="Delete" class="btn btn primary" style="color: white; background-color: #C94646; border-color: #C94646;" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -48,9 +48,19 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         }
 
         public async Task<IActionResult> OnPostAsync()
-        { // does not need validation as the values being changed do not have to be unique (they aren't primary keys)
-            await _roomService.UpdateRoomAsync(new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr), RoomNr, HotelNr);
-            return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+        { // need to validate that a type and price are selected
+            // if ModelState is NOT valid, reload (triggers error messages)
+            if (!ModelState.IsValid) { return Page(); }
+            try
+            {
+                await _roomService.UpdateRoomAsync(new Room(Room.RoomNr, Types[0], Room.Pris, Room.HotelNr), RoomNr, HotelNr);
+                return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
         }
         #endregion
     }

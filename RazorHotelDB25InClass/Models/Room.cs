@@ -18,10 +18,7 @@ namespace RazorHotelDB25InClass.Models
         public int HotelNr { get; set; }
         #endregion
 
-        public Room()
-        {
-
-        }
+        public Room() { }
         public Room(int nr, char types, double pris)
         {
             RoomNr = nr;

@@ -16,7 +16,6 @@ namespace RazorHotelDB25InClass.Pages.Hotels
 
         #region Properties
         [BindProperty] public Hotel Hotel { get; set; }
-        public string MessageError { get; set; }
         #endregion
 
         #region Constructor
@@ -29,6 +28,14 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #region Methods
         public void OnGet() { }
 
+        /// <summary>
+        /// Funktion når "Confirm" klikkes på Create Hotel siden
+        /// </summary>
+        /// <returns>
+        /// True: Hotel bliver oprettet og brugeren sendt tilbage til GetAllHotels
+        /// <br></br>
+        /// False: ErrorMessage bliver aktiveret og siden genindlæses
+        /// </returns>
         public async Task<IActionResult> OnPostAsync()
         {
             // if ModelState is NOT valid, reload (triggers error messages)
@@ -43,30 +50,6 @@ namespace RazorHotelDB25InClass.Pages.Hotels
                 ViewData["ErrorMessage"] = ex.Message;
             }
             return Page();
-
-            /* if statement
-            if (_hotelService.GetHotelFromIdAsync(Hotel.HotelNr) != null)
-            {
-                if (ModelState.IsValid)
-                {
-                    MessageError = $"Cannot create hotel. HotelID is already in use in the system.";
-                }
-                return Page();
-            }
-            await _hotelService.CreateHotelAsync(Hotel);
-            return RedirectToPage("GetAllHotels");
-            */
-            /* try catch statement
-            try
-            {
-                await _hotelService.CreateHotelAsync(Hotel);
-                return RedirectToPage("GetAllHotels");
-            }
-            catch
-            {
-                MessageError = $"Kan ikke oprette en hotel med HotelNo '{Hotel.HotelNr}' denne ID findes allerede";
-                return Page();
-            } */
         }
         #endregion
     }

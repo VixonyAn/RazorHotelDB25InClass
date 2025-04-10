@@ -17,10 +17,17 @@ namespace RazorHotelDB25InClass.Models
         public String Adresse { get; set; }
         #endregion
 
-        public Hotel()
-        {
-        }
+        /// <summary>
+        /// Parameterløs constructor til Hotel
+        /// </summary>
+        public Hotel() { }
 
+        /// <summary>
+        /// Hotel constructor
+        /// </summary>
+        /// <param name="hotelNr">Primary key, unikt nummer som identificerer et Hotel</param>
+        /// <param name="navn">Hotellets navn</param>
+        /// <param name="adresse">Hotellets adresse</param>
         public Hotel(int hotelNr, string navn, string adresse)
         {
             HotelNr = hotelNr;
@@ -28,11 +35,20 @@ namespace RazorHotelDB25InClass.Models
             Adresse = adresse;
         }
 
+        /// <summary>
+        /// ToString for Hoteller
+        /// </summary>
+        /// <returns>String med Hotellets navn, id, og adresse</returns>
         public override string ToString()
         {
             return $"{nameof(HotelNr)}: {HotelNr}, {nameof(Navn)}: {Navn}, {nameof(Adresse)}: {Adresse}";
         }
 
+        /// <summary>
+        /// Sammenligner navne af hoteller for at organisere i alfabetisk rækkefølge
+        /// </summary>
+        /// <param name="other">Det andet hotel, som den første hotel bliver sammenlignet med</param>
+        /// <returns>Returns -1, 0, eller 1</returns>
         public int CompareTo(Hotel? other)
         {
             return Navn.CompareTo(other.Navn);

@@ -17,12 +17,9 @@ namespace RazorHotelDB25InClass.Pages.Rooms
 
         #region Properties
         public List<Room> Rooms { get; set; }
-
-        [BindProperty]
-        public int HotelNr { get; set; }
-
+        [BindProperty] public int HotelNr { get; set; }
         public Hotel Hotel { get; set; }
-        public List<SelectListItem> HotelSelectList { get; set; }
+        public string MessageError { get; set; }
         #endregion
 
         #region Constructor
@@ -36,23 +33,24 @@ namespace RazorHotelDB25InClass.Pages.Rooms
         #region Methods
         public async Task OnGetAsync(int hotelNr)
         {
-            HotelNr = hotelNr;
-            Hotel = await _hotelService.GetHotelFromIdAsync(hotelNr);
-            Rooms = await _roomService.GetAllRoomAsync(HotelNr);
-            // onget if hotelNr = null then set to get all?
+            try
+            {
+                // if an invalid hotelNr is received, the hotelNr is set to "1"
+                if (await _hotelService.GetHotelFromIdAsync(hotelNr) == null )
+                {
+                    hotelNr = 1;
+                    MessageError = $"Invalid hotelNr received, redirected to hotelNr 1";
+                }
+                // NB: this can cause issues if the database does not contain a hotel with this ID
+                HotelNr = hotelNr;
+                Hotel = await _hotelService.GetHotelFromIdAsync(hotelNr);
+                Rooms = await _roomService.GetAllRoomAsync(HotelNr);
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
         }
-
-        //private async Task createHotelSelectList() // small first letter for private methods
-        //{
-        //    List<Hotel> HotelList = await _hotelService.GetAllHotelAsync();
-        //    HotelSelectList = new List<SelectListItem>();
-        //    HotelSelectList.Add(new SelectListItem("Vælg en Hotel", "-1"));
-        //    foreach (Hotel hotel in HotelList)
-        //    {
-        //        SelectListItem hsl = new SelectListItem(hotel.HotelNr.ToString(), hotel.Navn);
-        //        HotelSelectList.Add(hsl);
-        //    }
-        //}
         #endregion
     }
 }

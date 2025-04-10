@@ -26,12 +26,26 @@ namespace RazorHotelDB25InClass.Pages.Hotels
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Funktion når Delete Hotel siden bliver indlæst
+        /// </summary>
+        /// <param name="HotelNr">ID på Hotellet der skal slettes</param>
+        /// <returns>Hotellets informationer</returns>
         public async Task<IActionResult> OnGetAsync(int HotelNr)
         {
             Hotel = await _hotelService.GetHotelFromIdAsync(HotelNr); // henter hotel data
             return Page();
         }
 
+        /// <summary>
+        /// Funktion når "Delete" klikkes på Delete Hotel siden
+        /// </summary>
+        /// <param name="HotelNr">ID på Hotellet der skal slettes</param>
+        /// <returns>
+        /// True: Hotel bliver slettet og brugeren sendt tilbage til GetAllHotels
+        /// <br></br>
+        /// False: ErrorMessage bliver aktiveret og siden genindlæses
+        /// </returns>
         public async Task<IActionResult> OnPostAsync(int HotelNr)
         {
             if (Confirm == false)
@@ -39,8 +53,16 @@ namespace RazorHotelDB25InClass.Pages.Hotels
                 MessageError = $"Remember to check the Confirm box";
                 return Page();
             }
-            await _hotelService.DeleteHotelAsync(HotelNr);
-            return RedirectToPage("GetAllHotels");
+            try
+            {
+                await _hotelService.DeleteHotelAsync(HotelNr);
+                return RedirectToPage("GetAllHotels");
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
         }
         #endregion
     }

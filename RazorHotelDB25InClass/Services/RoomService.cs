@@ -59,8 +59,8 @@ namespace RazorHotelDB25InClass.Services
                     SqlCommand command = new SqlCommand(roomSql + " and Room_No = @RoomNo", connection);
                     command.Parameters.AddWithValue("@HotelNo", hotelNr);
                     command.Parameters.AddWithValue("@RoomNo", roomNr);
-                    command.Connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+                    await command.Connection.OpenAsync();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
                     if (reader.Read()) // reads from data not from console
                     {
                         int rNr = reader.GetInt32("Room_No");
@@ -97,8 +97,8 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@HotelNo", room.HotelNr);
                     command.Parameters.AddWithValue("@Types", room.Types);
                     command.Parameters.AddWithValue("@Price", room.Pris);
-                    connection.Open();
-                    command.ExecuteNonQuery();
+                    await command.Connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
                 }
                 catch (SqlException sqlExp)
                 {
@@ -126,8 +126,8 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@HotelNo", room.HotelNr);
                     command.Parameters.AddWithValue("@Types", room.Types);
                     command.Parameters.AddWithValue("@Price", room.Pris);
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
+                    await command.Connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
                 }
                 catch (SqlException sqlExp)
                 {
@@ -156,8 +156,8 @@ namespace RazorHotelDB25InClass.Services
                     SqlCommand command = new SqlCommand(deleteSql, connection);
                     command.Parameters.AddWithValue("@RoomNo", roomNr);
                     command.Parameters.AddWithValue("@HotelNo", hotelNr);
-                    connection.Open();
-                    int noOfRows = command.ExecuteNonQuery();
+                    await connection.OpenAsync();
+                    int noOfRows = await command.ExecuteNonQueryAsync();
                     if (noOfRows == 0) { return null; }
                 }
                 catch (SqlException sqlExp)

@@ -20,7 +20,7 @@
 
         <div class="form-group">
             <label class="custom-control-label">Sort Order</label>
-            <select asp-for="SortOrder" onchange="this.form.submit()">
+            <select asp-for="@Model.SortOrder" onchange="this.form.submit()">
                 <option value="Ascending">Ascending</option>
                 <option value="Descending">Descending</option>
             </select>

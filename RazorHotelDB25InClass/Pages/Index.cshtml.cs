@@ -9,6 +9,7 @@ namespace RazorHotelDB25InClass.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private IUserService _userService;
+
         public string Username { get; set; }
         public User CurrentUser { get; set; }
 
@@ -20,14 +21,22 @@ namespace RazorHotelDB25InClass.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Username = HttpContext.Session.GetString("Username");
-            if (Username == null)
+            try
             {
-                return RedirectToPage("Users/Login");
+                Username = HttpContext.Session.GetString("Username");
+                if (Username == null)
+                {
+                    return RedirectToPage("Users/Login");
+                }
+                else
+                {
+                    CurrentUser = await _userService.GetUserByUsernameAsync(Username);
+                }
+                return Page();
             }
-            else
+            catch (Exception ex)
             {
-                CurrentUser = await _userService.GetUserByUsernameAsync(Username);
+                ViewData["ErrorMessage"] = ex.Message;
             }
             return Page();
         }

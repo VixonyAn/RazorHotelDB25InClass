@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorHotelDB25InClass.Interfaces;
 using RazorHotelDB25InClass.Models;
+using RazorHotelDB25InClass.Services;
 
 namespace RazorHotelDB25InClass.Pages.Rooms
 {
@@ -42,8 +43,16 @@ namespace RazorHotelDB25InClass.Pages.Rooms
                 MessageError = $"Remember to check the Confirm box";
                 return Page();
             }
-            await _roomService.DeleteRoomAsync(RoomNr, HotelNr);
-            return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+            try
+            {
+                await _roomService.DeleteRoomAsync(RoomNr, HotelNr);
+                return RedirectToPage("GetAllRooms", new { HotelNr = HotelNr });
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
         }
         #endregion
     }

@@ -15,15 +15,12 @@ namespace RazorHotelDB25InClass.Pages.Users
         #region Properties
         [BindProperty] public User User { get; set; }
         public string MessageError { get; set; }
-        public List<User> Users { get; set; }
-
         #endregion
 
         #region Constructors
         public LoginModel(IUserService userService)
         {
             _userService = userService;
-            Users = _userService.GetAllUsersAsync().Result;
         }
         #endregion
 
@@ -37,28 +34,28 @@ namespace RazorHotelDB25InClass.Pages.Users
         }
 
         public async Task<IActionResult> OnPostAsync()
-        { //nothing saved in loginUser
-            User? loginUser = await _userService.VerifyUserAsync(User.Username, User.Password);
-            if (loginUser != null)
+        {
+            // if ModelState is NOT valid, reload (triggers error messages)
+            if (!ModelState.IsValid) { return Page(); }
+            try
             {
-                HttpContext.Session.SetString("Username", loginUser.Username);
-                return RedirectToPage("../Index");
+                User? loginUser = await _userService.VerifyUserAsync(User.Username, User.Password);
+                if (loginUser != null)
+                {
+                    HttpContext.Session.SetString("Username", loginUser.Username);
+                    return RedirectToPage("GetAllUsers");
+                }
+                else
+                { // if user cannot be verified
+                    MessageError = "Invalid username or password";
+                    return Page();
+                }
             }
-            else
-            {
-                MessageError = "Invalid username or password";
+            catch (Exception ex)
+            { // catches exceptions like weak connection or mistake in query
+                ViewData["ErrorMessage"] = ex.Message;
                 return Page();
             }
-            /*
-            if (_userService.VerifyUserAsync(User.Username, User.Password) == null)
-            {
-                MessageError = "Invalid username or password";
-                Password = ""; return Page();
-            }
-            User? loginUser = await _userService.VerifyUserAsync(User.Username, User.Password);
-            HttpContext.Session.SetString("Username", loginUser.Username);
-            return RedirectToPage("../Hotels/GetAllHotels"); 
-            */
         }
         #endregion
     }

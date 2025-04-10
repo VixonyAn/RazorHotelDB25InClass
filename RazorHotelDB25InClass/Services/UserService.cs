@@ -8,8 +8,9 @@ namespace RazorHotelDB25InClass.Services
     public class UserService : Secret, IUserService
     {
         private string connectionString = Secret.ConnectionString;
-        private string queryString = "Select Username, Password from Users";
-        private string insertSql = "Insert into Users Values(@Username, @Password)";
+        private string queryString = "Select Username, Password, ImageUrl from Users";
+        private string insertSql = "Insert into Users Values(@Username, @Password, @ImageUrl)";
+        private string deleteSql = "Delete from Users where Username = @Username";
 
         public async Task<List<User>> GetAllUsersAsync()
         {
@@ -25,7 +26,8 @@ namespace RazorHotelDB25InClass.Services
                     {
                         string username = reader.GetString("Username");
                         string password = reader.GetString("Password");
-                        User user = new User(username, password);
+                        string imageUrl = reader.GetString("ImageUrl");
+                        User user = new User(username, password, imageUrl);
                         users.Add(user);
                     }
                     reader.Close();
@@ -54,6 +56,7 @@ namespace RazorHotelDB25InClass.Services
                     SqlCommand command = new SqlCommand(insertSql, connection);
                     command.Parameters.AddWithValue("@Username", user.Username);
                     command.Parameters.AddWithValue("@Password", user.Password);
+                    command.Parameters.AddWithValue("@ImageUrl", user.ImageUrl);
                     await command.Connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
                 }
@@ -88,7 +91,8 @@ namespace RazorHotelDB25InClass.Services
                     {
                         string uName = reader.GetString("Username");
                         string pWord = reader.GetString("Password");
-                        user = new User(uName, pWord);
+                        string imgUrl = reader.GetString("ImageUrl");
+                        user = new User(uName, pWord, imgUrl);
                     }
                     reader.Close();
                 }
@@ -118,7 +122,7 @@ namespace RazorHotelDB25InClass.Services
                     command.Parameters.AddWithValue("@Username", username);
                     command.Parameters.AddWithValue("@Password", password);
                     await command.Connection.OpenAsync();
-                    SqlDataReader reader = await command.ExecuteReaderAsync(); // breaks here
+                    SqlDataReader reader = await command.ExecuteReaderAsync(); // breaks here - if secret string is incorrect
                     if (await reader.ReadAsync())
                     {
                         string uName = reader.GetString("Username");
@@ -126,6 +130,36 @@ namespace RazorHotelDB25InClass.Services
                         user = new User(uName, pWord);
                     }
                     reader.Close();
+                }
+                catch (SqlException sqlExp)
+                {
+                    Console.WriteLine("Database error" + sqlExp.Message);
+                    throw sqlExp;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel fejl: " + ex.Message);
+                    throw ex;
+                }
+                finally { }
+                return user;
+            }
+        }
+
+        public async Task<User?> DeleteUserAsync(string username)
+        {
+            User? user = GetUserByUsernameAsync(username).Result;
+            if (user == null) { return null; }
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(deleteSql, connection);
+                    command.Parameters.AddWithValue("@Username", username);
+                    await connection.OpenAsync();
+                    int noOfRows = await command.ExecuteNonQueryAsync();
+                    if (noOfRows == 0) { return null; }
                 }
                 catch (SqlException sqlExp)
                 {

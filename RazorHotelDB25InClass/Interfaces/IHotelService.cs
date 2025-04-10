@@ -4,34 +4,46 @@ namespace RazorHotelDB25InClass.Interfaces
 {
     public interface IHotelService
     {
-        /// henter alle hoteller fra databasen
-        /// <returns>Liste af hoteller</returns>
+        /// <summary>
+        /// Henter alle hoteller fra databasen og returnerer som liste
+        /// </summary>
+        /// <returns>Liste af Hoteller</returns>
         Task<List<Hotel>> GetAllHotelAsync();
 
-        /// Henter et specifik hotel fra database 
-        /// <param name="hotelNr">Udpeger det hotel der ønskes fra databasen</param>
-        /// <returns>Det fundne hotel eller null hvis hotellet ikke findes</returns>
+        /// <summary>
+        /// Henter et specifik hotel fra databasen
+        /// </summary>
+        /// <param name="hotelNr">HotelId man søger efter</param>
+        /// <returns>Hotel objekt</returns>
         Task<Hotel?> GetHotelFromIdAsync(int hotelNr);
 
+        /// <summary>
         /// Indsætter et nyt hotel i databasen
-        /// <param name="hotel">hotellet der skal indsættes</param>
-        /// <returns>Sand hvis der er gået godt ellers falsk</returns>
+        /// </summary>
+        /// <param name="hotel">Hotel objekt</param>
+        /// <returns>True hvis Hotellet var oprettet</returns>
         Task<bool> CreateHotelAsync(Hotel hotel);
 
+        /// <summary>
         /// Opdaterer en hotel i databasen
-        /// <param name="hotel">De nye værdier til hotellet</param>
-        /// <param name="hotelNr">Nummer på den hotel der skal opdateres</param>
-        /// <returns>Sand hvis der er gået godt ellers falsk</returns>
+        /// </summary>
+        /// <param name="hotel">Ny Hotel objekt</param>
+        /// <param name="hotelNr">HotelId af Hotel der bliver ændret</param>
+        /// <returns>True hvis Hotellet var opdateret</returns>
         Task<bool> UpdateHotelAsync(Hotel hotel, int hotelNr);
 
+        /// <summary>
         /// Sletter et hotel fra databasen
-        /// <param name="hotelNr">Nummer på det hotel der skal slettes</param>
-        /// <returns>Det hotel der er slettet fra databasen, returnere null hvis hotellet ikke findes</returns>
+        /// </summary>
+        /// <param name="hotelNr">HotelId af Hotel man vil slette</param>
+        /// <returns>Hotel objekt</returns>
         Task<Hotel?> DeleteHotelAsync(int hotelNr);
 
-        /// henter alle hoteller fra databasen
-        /// <param name="name">Angiver navn på hotel der hentes fra databasen</param>
-        /// <returns></returns>
+        /// <summary>
+        /// Henter hoteller fra databasen hvis navn indeholder søgeordet og returnerer som liste
+        /// </summary>
+        /// <param name="name">Søgeord</param>
+        /// <returns>Liste af Hoteller hvis navne indeholde søgeordet</returns>
         Task<List<Hotel>> GetHotelsByNameAsync(string name);
     }
 }
